@@ -1,5 +1,5 @@
 <template>
-    <div id="view_employee">
+    <div class="container" id="view_employee">
         <ul class="collection with-header">
             <li class="collection-header">
                 <h4>{{name}}</h4>
@@ -8,11 +8,14 @@
             <li class="collection-item">Dept: {{dept}}</li>
             <li class="collection-item">Position: {{position}}</li>
         </ul>
-        <li class="collection-item">
+        <div class="collection-item">
+        <router-link v-bind:to="{name: 'edit_employee', params: {employee_id: employeeid}}" class="btn green">
+            Edit
+        </router-link>
         <button @click='deleteEmployee' class="btn red">
             Delete
         </button>
-        </li>
+        </div>
         
     </div>
 </template>
