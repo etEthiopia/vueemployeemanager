@@ -1,46 +1,106 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import Dashboard from '@/components/Dashboard'
 import NewEmployee from '@/components/NewEmployee'
 import EditEmployee from '@/components/EditEmployee'
 import ViewEmployee from '@/components/ViewEmployee'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import firebase from 'firebase'
+
 
 Vue.use(Router)
 
-export default new Router({
+let router =  new Router({
   routes: [
     {
       path: '/',
       name: 'dashboard',
-      component: Dashboard
+      component: Dashboard,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: {
+        requiresGuest: true
+      }
     },
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
+      meta: {
+        requiresGuest: true
+      }
     },
     {
       path: '/new',
       name: 'new_employee',
-      component: NewEmployee
+      component: NewEmployee,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/edit/:employee_id',
       name: 'edit_employee',
-      component: EditEmployee
+      component: EditEmployee,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/:employee_id',
       name: 'view_employee',
-      component: ViewEmployee
+      component: ViewEmployee,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
+
+router.beforeEach((to,from, next) => {
+  // Check for requiredAuth guard
+  if(to.matched.some(record => record.meta.requiresAuth)){
+    // Check if not logged it
+    if(!firebase.auth().currentUser){
+      // Go to Login
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    }
+    else{
+      // Proceed
+      next();
+    }
+  }
+  // Check for requiredGuest
+  else if(to.matched.some(record => record.meta.requiresGuest)){
+    if(firebase.auth().currentUser){
+      // Go to Login
+      next({
+        path: '/',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+    }
+    else{
+      // Proceed
+      next();
+    }
+  }
+  else{
+    next();
+  }
+})
+
+export default router;
