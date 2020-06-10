@@ -3,7 +3,7 @@
         <div class="row center">
             <div class="col s10 m6 offset-m3">
                 <div class="login card-panel green-text center">
-                    <h3>Login</h3>
+                    <h3>Register</h3>
                     <form action="">
                         <div class="input-field">
                             <i class="material-icons prefix">
@@ -21,7 +21,7 @@
                         </div>
                         <div class="right-align">
                             <button class="btn green white-text">
-                            Login
+                            Register
                             </button>
                         </div>
                         
@@ -33,7 +33,7 @@
 </template>
 <script>
 export default {
-    name: 'login',
+    name: 'register',
     data(){
         return{};
     }
